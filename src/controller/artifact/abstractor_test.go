@@ -304,6 +304,13 @@ type abstractorTestSuite struct {
 }
 
 func (a *abstractorTestSuite) SetupTest() {
+	originalProcessorRegistry := processor.Registry
+	originalManifestRegistry := manifest.Registry
+	a.T().Cleanup(func() {
+		processor.Registry = originalProcessorRegistry
+		manifest.Registry = originalManifestRegistry
+	})
+
 	a.regCli = &registry.Client{}
 	a.argMgr = &tart.Manager{}
 	a.blobMgr = &tblob.Manager{}
